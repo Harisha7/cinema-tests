@@ -10,7 +10,7 @@ on:
 jobs:
   # build, the name of the job, a server to create and auto configure
   build:
-
+   # on github actions this comes with MYSQL 8.0
     runs-on: ubuntu-latest
 
     strategy:
@@ -35,9 +35,16 @@ jobs:
       # mentioned in package.json, preferably during CI
     - run: npm ci
       #install 
-    - uses: mirromutth/mysql-action@v1.1
-      with:
-        mysql root password: Ayukta@Rithika2
+    #- uses: mirromutth/mysql-action@v1.1
+     # with:
+      #  mysql root password: Ayukta@Rithika2
+        # start up mysql
+    - run: sudo service mysql start 
+    - run: mysqladmin --user=root --password=root password "Ayukta@Rithika2"
+      # restart mysql
+    - run: sudo service mysql restart 
+      # seed the db with initial dummy/test data
+    - run: npm run seed-db  
       # start the backend / rest-api-server
       # (without blocking the terminsk -nohup)
     - run: nohup npm run backend &
